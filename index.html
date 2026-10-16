@@ -1,0 +1,793 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>MATEX 2027</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: sticky masthead + hash-routed pages; hero is a grain-boundary micrograph (Voronoi) with the wordmark etched on top. */
+:root{
+  --bg:#FFFFFF; --surface:#FFFFFF; --ink:#0E1B33; --muted:#4D5B73; --line:#E6E9EF;
+  --navy:#0E2148; --hero:#FFFCF8; --hero-ink:#0E2148; --hero-muted:#5A6680; --motif:rgba(217,96,26,.05); --saffron:#F2A13B;
+  --forge:#D9601A; --forge-soft:#FBE7DA; --leaf:#2C8A56; --leaf-soft:#E0F2E7; --azure:#1E5BA6; --azure-soft:#E1ECF8; --rose:#B4433E; --rose-soft:#F7E2E0;
+  --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --body:"Public Sans","Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --maxw:1120px; color-scheme:light;
+}
+
+/* jaali lattice behind every page */
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:var(--motif);
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44'%3E%3Cg fill='none' stroke='%23000' stroke-width='1.1'%3E%3Ccircle cx='0' cy='0' r='22'/%3E%3Ccircle cx='44' cy='0' r='22'/%3E%3Ccircle cx='0' cy='44' r='22'/%3E%3Ccircle cx='44' cy='44' r='22'/%3E%3Ccircle cx='22' cy='22' r='22'/%3E%3Ccircle cx='22' cy='22' r='3' fill='%23000'/%3E%3C/g%3E%3C/svg%3E") repeat;
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44'%3E%3Cg fill='none' stroke='%23000' stroke-width='1.1'%3E%3Ccircle cx='0' cy='0' r='22'/%3E%3Ccircle cx='44' cy='0' r='22'/%3E%3Ccircle cx='0' cy='44' r='22'/%3E%3Ccircle cx='44' cy='44' r='22'/%3E%3Ccircle cx='22' cy='22' r='22'/%3E%3Ccircle cx='22' cy='22' r='3' fill='%23000'/%3E%3C/g%3E%3C/svg%3E") repeat}
+/* toran: marigold + mango-leaf garland */
+.toran{position:relative;z-index:2;height:34px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='34'%3E%3Cpath d='M0 3 Q28 9 56 3' stroke='%23C9560F' stroke-width='1.5' fill='none'/%3E%3Cpath d='M28 6 C21 13 22 24 28 32 C34 24 35 13 28 6Z' fill='%232C8A56'/%3E%3Cpath d='M28 9 L28 29' stroke='%23A6D9B8' stroke-width='1'/%3E%3Ccircle cx='9' cy='7' r='5' fill='%23F2A13B'/%3E%3Ccircle cx='9' cy='7' r='2.2' fill='%23D9601A'/%3E%3Ccircle cx='47' cy='7' r='5' fill='%23F2A13B'/%3E%3Ccircle cx='47' cy='7' r='2.2' fill='%23D9601A'/%3E%3C/svg%3E") repeat-x top left}
+.lotus{width:46px;height:auto;color:var(--forge);flex:none}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;margin:0}
+a{color:var(--azure)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--forge);outline-offset:3px;border-radius:4px}
+h1,h2,h3{font-family:var(--display);line-height:1.02;text-wrap:balance;margin:0;letter-spacing:.005em}
+h2{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:800;color:var(--navy)}
+h3{font-size:1.55rem;font-weight:800;color:var(--navy)}
+p{margin:0}
+.wrap{max-width:var(--maxw);margin:0 auto;padding-inline:20px}
+.eyebrow{font-family:var(--mono);font-size:.74rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--forge);display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:22px;height:2px;background:currentColor}
+.lede{font-size:1.12rem;color:var(--muted);max-width:62ch}
+.stack{display:flex;flex-direction:column;gap:14px}
+.tbd{display:inline-block;font-family:var(--mono);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px dashed var(--line);padding:2px 8px;border-radius:4px}
+
+/* ---------- masthead ---------- */
+.mast{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.mast .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:64px}
+.brand{display:flex;align-items:baseline;gap:6px;text-decoration:none;color:var(--navy)}
+.brand b{font-family:var(--display);font-weight:900;font-size:1.7rem;letter-spacing:.02em}
+.brand span{font-family:var(--display);font-weight:900;font-size:1.7rem;color:var(--forge)}
+.brand small{font-family:var(--mono);font-size:.68rem;color:var(--muted);margin-left:8px;letter-spacing:.06em}
+nav.main{display:flex;gap:2px;flex-wrap:wrap}
+nav.main a{text-decoration:none;color:var(--muted);font-weight:600;font-size:.9rem;padding:8px 11px;border-radius:6px}
+nav.main a:hover{color:var(--ink);background:var(--surface)}
+nav.main a[aria-current="page"]{color:var(--forge)}
+.burger{display:none;background:none;border:1px solid var(--line);color:var(--ink);border-radius:6px;padding:8px 12px;font:600 .85rem var(--body);cursor:pointer}
+@media (max-width:980px){
+  .burger{display:block}
+  nav.main{display:none;position:absolute;left:0;right:0;top:100%;background:var(--bg);border-bottom:1px solid var(--line);flex-direction:column;padding:8px 16px 16px}
+  nav.main.open{display:flex}
+  nav.main a{padding:12px 8px;font-size:1rem}
+  .brand small{display:none}
+}
+
+/* ---------- pages ---------- */
+.page{display:none}
+.page.active{display:block;animation:rise .45s ease both}
+@keyframes rise{from{opacity:.4;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.page.active{animation:none}}
+.pagehead{padding-block:56px 36px;border-bottom:1px solid var(--line)}
+.pagehead .wrap{display:flex;flex-direction:column;gap:14px}
+section.block{padding-block:56px}
+section.block + section.block{border-top:1px solid var(--line)}
+
+/* ---------- hero ---------- */
+.hero{position:relative;background:var(--hero);color:var(--hero-ink);overflow:hidden}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hero .veil{position:absolute;inset:0;background:linear-gradient(100deg,var(--hero) 34%,color-mix(in srgb,var(--hero) 30%,transparent) 72%,transparent)}
+@media (max-width:720px){.hero .veil{background:color-mix(in srgb,var(--hero) 72%,transparent)}}
+.hero .wrap{position:relative;padding-block:44px 64px;display:flex;flex-direction:column;gap:22px}
+.hero .kicker{font-family:var(--mono);font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--hero-muted)}
+.hero h1{font-size:clamp(4.2rem,15vw,10rem);font-weight:900;line-height:.86;letter-spacing:.01em}
+.hero h1 em{font-style:normal;color:var(--forge);display:inline-block}
+.hero .full{font-family:var(--display);font-weight:700;font-size:clamp(1.4rem,3.2vw,2.1rem);max-width:24ch;line-height:1.08}
+.hero .tag{color:var(--hero-muted);max-width:52ch;font-size:1.05rem}
+.facts{display:flex;flex-wrap:wrap;gap:10px 28px;font-family:var(--mono);font-size:.86rem}
+.facts div{display:flex;flex-direction:column}
+.facts dt{color:var(--hero-muted);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase}
+.facts dd{margin:0;color:var(--hero-ink);font-weight:700}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:.95rem;text-decoration:none;padding:12px 20px;border-radius:6px;border:1.5px solid transparent;cursor:pointer}
+.btn.primary{background:#E0661B;color:#fff}
+.btn.primary:hover{background:#C9560F}
+.btn.ghost{border-color:color-mix(in srgb,var(--hero-ink) 40%,transparent);color:var(--hero-ink)}
+.btn.ghost:hover{border-color:var(--hero-ink)}
+.btn.line{border-color:var(--line);color:var(--ink);background:var(--surface)}
+.btn.line:hover{border-color:var(--forge);color:var(--forge)}
+.motto{font-family:var(--mono);font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--leaf)}
+
+/* countdown strip */
+.countdown{background:var(--surface);border-bottom:1px solid var(--line)}
+.countdown .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;padding-block:18px}
+.cd{display:flex;gap:22px;font-variant-numeric:tabular-nums}
+.cd div{display:flex;flex-direction:column;align-items:flex-start}
+.cd b{font-family:var(--display);font-weight:900;font-size:2.3rem;line-height:1;color:var(--navy)}
+.cd span{font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.cd-label{font-weight:600;color:var(--muted)}
+.cd-label strong{color:var(--ink)}
+
+/* ---------- periodic theme tiles ---------- */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.tile{--c:var(--forge);--cs:var(--forge-soft);position:relative;display:flex;flex-direction:column;gap:10px;text-decoration:none;color:var(--ink);background:var(--surface);border:1.5px solid var(--line);border-radius:8px;padding:18px 18px 20px;min-width:0;transition:border-color .2s,transform .2s}
+.tile:hover{border-color:var(--c);transform:translateY(-3px)}
+@media (prefers-reduced-motion:reduce){.tile:hover{transform:none}}
+.tile .z{font-family:var(--mono);font-size:.78rem;font-weight:700;color:var(--muted);display:flex;justify-content:space-between}
+.tile .sym{font-family:var(--display);font-weight:900;font-size:4.2rem;line-height:.9;color:var(--c)}
+.tile .nm{font-weight:700;line-height:1.3}
+.tile .mass{font-family:var(--mono);font-size:.72rem;color:var(--muted);margin-top:auto}
+.t-gm{--c:var(--leaf);--cs:var(--leaf-soft)}
+.t-ai{--c:var(--azure);--cs:var(--azure-soft)}
+.t-ax{--c:var(--forge);--cs:var(--forge-soft)}
+.t-ev{--c:var(--rose);--cs:var(--rose-soft)}
+
+/* ---------- generic grids ---------- */
+.split{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:start}
+.split > *{min-width:0}
+@media (max-width:820px){.split{grid-template-columns:1fr;gap:32px}}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:2px solid var(--navy)}
+.stats div{padding:16px 14px 4px 0;display:flex;flex-direction:column;gap:2px}
+.stats b{font-family:var(--display);font-weight:900;font-size:2.8rem;line-height:1;color:var(--navy);font-variant-numeric:tabular-nums}
+.stats span{font-size:.86rem;color:var(--muted)}
+@media (max-width:640px){.stats{grid-template-columns:repeat(2,1fr)}}
+.reasons{display:grid;grid-template-columns:repeat(2,1fr);gap:22px 32px}
+.reasons div{display:flex;flex-direction:column;gap:6px;padding-top:12px;border-top:1px solid var(--line)}
+.reasons b{font-weight:700}
+.reasons p{color:var(--muted);font-size:.95rem}
+@media (max-width:640px){.reasons{grid-template-columns:1fr}}
+
+.hosts{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.host{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:22px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.host .yr{font-family:var(--mono);font-size:.74rem;font-weight:700;color:var(--forge);letter-spacing:.08em}
+.host p{color:var(--muted);font-size:.95rem}
+.host.wide{grid-column:1 / -1;border-color:color-mix(in srgb,var(--forge) 35%,var(--line))}
+.mme{display:grid;grid-template-columns:1.2fr 1fr;gap:28px}
+.mme > div{min-width:0;display:flex;flex-direction:column;gap:10px}
+.mme dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:.92rem}
+.mme dt{font-family:var(--mono);font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-top:3px}
+.mme dd{margin:0}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips span{font-size:.8rem;padding:3px 9px;border-radius:4px;background:var(--forge-soft);color:var(--ink)}
+@media (max-width:720px){.hosts{grid-template-columns:1fr}.mme{grid-template-columns:1fr}}
+
+/* themes detail */
+.theme{display:grid;grid-template-columns:150px 1fr;gap:28px;padding-block:32px;border-top:1px solid var(--line)}
+.theme:first-child{border-top:0}
+.theme .badge{--c:var(--forge);--cs:var(--forge-soft);background:var(--cs);border:1.5px solid var(--c);border-radius:8px;aspect-ratio:1;max-width:150px;display:flex;flex-direction:column;justify-content:space-between;padding:12px}
+.theme .badge .z{font-family:var(--mono);font-size:.74rem;font-weight:700;color:var(--c)}
+.theme .badge .sym{font-family:var(--display);font-weight:900;font-size:4.4rem;line-height:.85;color:var(--c)}
+.theme > div{min-width:0}
+.theme ul{margin:14px 0 0;padding:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:8px 24px}
+.theme li{padding-left:16px;position:relative;font-size:.96rem}
+.theme li::before{content:"";position:absolute;left:0;top:.62em;width:7px;height:7px;background:var(--c,var(--forge));transform:rotate(45deg)}
+.theme.t-gm,.theme .t-gm{--c:var(--leaf);--cs:var(--leaf-soft)}
+.theme.t-ai{--c:var(--azure);--cs:var(--azure-soft)}
+.theme.t-ax{--c:var(--forge);--cs:var(--forge-soft)}
+.theme.t-ev{--c:var(--rose);--cs:var(--rose-soft)}
+@media (max-width:720px){.theme{grid-template-columns:1fr;gap:16px}.theme .badge{max-width:110px}.theme .badge .sym{font-size:3.2rem}.theme ul{grid-template-columns:1fr}}
+
+/* timeline */
+.timeline{display:flex;flex-direction:column;border-left:2px solid var(--line);margin-left:6px}
+.tl{display:grid;grid-template-columns:150px 1fr;gap:16px;padding:12px 0 12px 22px;position:relative}
+.tl::before{content:"";position:absolute;left:-7px;top:19px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--forge)}
+.tl.final::before{background:var(--forge)}
+.tl time{font-family:var(--mono);font-weight:700;font-size:.9rem;color:var(--navy);font-variant-numeric:tabular-nums}
+.tl.final time,.tl.final span{color:var(--forge);font-weight:700}
+@media (max-width:520px){.tl{grid-template-columns:1fr;gap:2px}}
+
+/* tables */
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:.95rem}
+th,td{text-align:left;padding:13px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;background:color-mix(in srgb,var(--bg) 60%,var(--surface))}
+tr:last-child td{border-bottom:0}
+td.t{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--navy);font-weight:700;width:130px;font-size:.88rem}
+
+/* programme */
+.days{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.days > div{min-width:0}
+@media (max-width:820px){.days{grid-template-columns:1fr}}
+.dayhead{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:12px}
+.dayhead h3{font-size:2rem}
+.dayhead span{font-family:var(--mono);font-size:.8rem;color:var(--forge);font-weight:700}
+.slot td:nth-child(2) b{display:block}
+.slot td:nth-child(2) small{color:var(--muted);display:block}
+.names{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px 24px}
+.names li{font-family:var(--display);font-size:1.3rem;font-weight:800;color:var(--navy);line-height:1.15}
+.note{color:var(--muted);font-size:.93rem}
+.yn{display:inline-block;font-family:var(--mono);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--forge);border:1px solid var(--forge);border-radius:4px;padding:1px 7px;margin-right:4px}
+.duties{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.duties > div{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.duties .duty{font-family:var(--mono);font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--forge)}
+.duties b{font-family:var(--display);font-size:1.3rem;font-weight:800;color:var(--navy);line-height:1.15}
+.duties .span2{grid-column:span 2}
+@media (max-width:560px){.duties .span2{grid-column:auto}}
+
+.pubs{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+.pubs li{display:flex;flex-direction:column;padding-left:14px;border-left:3px solid var(--forge)}
+.pubs li span{font-weight:600;font-style:italic}
+.pubs li small{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;color:var(--muted)}
+.kind{font-family:var(--mono);font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:4px;margin-left:6px;vertical-align:2px}
+.k-key{background:var(--forge-soft);color:var(--forge)}
+.k-tech{background:var(--azure-soft);color:var(--azure)}
+.k-soc{background:var(--leaf-soft);color:var(--leaf)}
+
+/* committee */
+.roles{display:flex;flex-direction:column}
+.role{display:grid;grid-template-columns:240px 1fr;gap:20px;padding-block:18px;border-top:1px solid var(--line)}
+.role:last-child{border-bottom:1px solid var(--line)}
+.role dt{font-family:var(--mono);font-size:.74rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--forge);padding-top:4px}
+.role dd{margin:0;display:flex;flex-direction:column;gap:10px}
+.person b{font-family:var(--display);font-size:1.5rem;font-weight:800;color:var(--navy);display:block;line-height:1.1}
+.person span{color:var(--muted);font-size:.93rem}
+@media (max-width:640px){.role{grid-template-columns:1fr;gap:6px}}
+
+/* sponsor tiers */
+.tiers{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.tier{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:18px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.tier h3{font-size:1.5rem}
+.tier .metal{font-family:var(--mono);font-size:.7rem;font-weight:700;color:var(--muted);letter-spacing:.08em}
+.tier ul{margin:0;padding-left:18px;font-size:.9rem;color:var(--muted);display:flex;flex-direction:column;gap:4px}
+.tier.pt{border-color:var(--navy);border-width:1.5px}
+@media (max-width:900px){.tiers{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.tiers{grid-template-columns:1fr}}
+
+/* callout */
+.callout{background:var(--hero);color:var(--hero-ink);border:1px solid color-mix(in srgb,var(--forge) 30%,transparent);border-radius:10px;padding:32px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px}
+.callout h3{color:var(--hero-ink);font-size:2.2rem}
+.callout p{color:var(--hero-muted);max-width:52ch}
+
+/* venue */
+.info{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.info > div{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:20px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.info p{color:var(--muted);font-size:.95rem}
+@media (max-width:820px){.info{grid-template-columns:1fr}}
+.contact{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.contact > div{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:22px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.mail{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.mail code{font-family:var(--mono);font-size:.88rem;user-select:all;word-break:break-all;color:var(--navy)}
+.copy{font:600 .78rem var(--body);background:none;border:1px solid var(--line);color:var(--muted);border-radius:4px;padding:3px 9px;cursor:pointer}
+.copy:hover{color:var(--forge);border-color:var(--forge)}
+@media (max-width:720px){.contact{grid-template-columns:1fr}}
+
+/* footer */
+footer{background:var(--hero);color:var(--hero-muted);margin-top:24px;border-top:1px solid var(--line)}
+footer .wrap{padding-block:40px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px;font-size:.9rem}
+footer b{font-family:var(--display);font-size:1.8rem;color:var(--hero-ink);font-weight:900}
+footer b span{color:var(--forge)}
+footer nav{display:flex;flex-wrap:wrap;gap:6px 18px}
+footer nav a{color:var(--hero-muted);text-decoration:none}
+footer nav a:hover{color:var(--hero-ink)}
+.draft{font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--forge)}
+</style>
+
+<header class="mast">
+  <div class="wrap">
+    <a class="brand" href="#home"><b>MATEX</b><span>2027</span><small>COEP TECH · PUNE</small></a>
+    <button class="burger" id="burger" aria-expanded="false" aria-controls="mainnav">Menu</button>
+    <nav class="main" id="mainnav" aria-label="Main">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#themes">Themes</a>
+      <a href="#papers">Call for Papers</a>
+      <a href="#programme">Programme</a>
+      <a href="#register">Registration</a>
+      <a href="#committee">Committee</a>
+      <a href="#venue">Venue &amp; Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<!-- ======================= HOME ======================= -->
+<div class="page" id="p-home">
+  <section class="hero">
+    <canvas id="rangoli" aria-hidden="true"></canvas>
+    <div class="veil"></div>
+    <div class="toran" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="kicker">International Conference · April 8–9, 2027 · Pune, India</div>
+      <h1>MATEX <em>2027</em></h1>
+      <p class="full">Materials, Metallurgy &amp; Emerging Technologies</p>
+      <p class="tag">Exploring the frontiers of materials for a sustainable, intelligent and resilient future.</p>
+      <dl class="facts">
+        <div><dt>Dates</dt><dd>8–9 April 2027</dd></div>
+        <div><dt>Venue</dt><dd>COEP Technological University</dd></div>
+        <div><dt>With</dt><dd>IIM Pune Chapter</dd></div>
+      </dl>
+      <div class="cta">
+        <a class="btn primary" href="#papers">Submit an abstract</a>
+        <a class="btn ghost" href="#register">Registration</a>
+      </div>
+      <p class="motto">Heritage · Knowledge · Innovation, for a better tomorrow</p>
+    </div>
+  </section>
+
+  <div class="countdown">
+    <div class="wrap">
+      <p class="cd-label">Opening session at <strong>COEP Tech, Pune</strong> in</p>
+      <div class="cd" id="cd" aria-live="off">
+        <div><b id="cd-d">—</b><span>Days</span></div>
+        <div><b id="cd-h">—</b><span>Hours</span></div>
+        <div><b id="cd-m">—</b><span>Minutes</span></div>
+      </div>
+    </div>
+  </div>
+
+  <section class="block">
+    <div class="wrap stack" style="gap:28px">
+      <div class="stack">
+        <div class="eyebrow">Programme</div>
+        <h2>Four grand engineering themes</h2>
+        <p class="lede">Ideas today, materials for tomorrow. Each theme runs from fundamental research to industrial application.</p>
+      </div>
+      <div class="tiles">
+        <a class="tile t-gm" href="#themes"><div class="z"><span>01</span><span>Theme</span></div><div class="sym">GM</div><div class="nm">Green Metallurgy, Critical Minerals &amp; Circular Materials</div><div class="mass">H₂-DRI · recycling · critical minerals</div></a>
+        <a class="tile t-ai" href="#themes"><div class="z"><span>02</span><span>Theme</span></div><div class="sym">AI</div><div class="nm">AI, Materials Informatics &amp; ICME</div><div class="mass">ML · CALPHAD · digital twins</div></a>
+        <a class="tile t-ax" href="#themes"><div class="z"><span>03</span><span>Theme</span></div><div class="sym">AX</div><div class="nm">Advanced Materials &amp; Manufacturing for Extreme Environments</div><div class="mass">HEAs · aerospace · additive mfg.</div></a>
+        <a class="tile t-ev" href="#themes"><div class="z"><span>04</span><span>Theme</span></div><div class="sym">EV</div><div class="nm">Energy Materials &amp; Electric Mobility</div><div class="mass">batteries · hydrogen · fuel cells</div></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap split">
+      <div class="stack">
+        <div class="eyebrow">Deadlines</div>
+        <h2>Key dates</h2>
+        <p class="lede">The call for papers opens on 8 November 2026. Dates are provisional until the submission portal goes live.</p>
+        <div><a class="btn line" href="#papers">Full call for papers</a></div>
+      </div>
+      <div class="timeline">
+        <div class="tl"><time>08 Nov 2026</time><span>Call for papers opens</span></div>
+        <div class="tl"><time>17 Jan 2027</time><span>Abstract submission deadline</span></div>
+        <div class="tl"><time>08 Feb 2027</time><span>Notification of acceptance</span></div>
+        <div class="tl"><time>07 Mar 2027</time><span>Full paper submission deadline</span></div>
+        <div class="tl final"><time>08–09 Apr 2027</time><span>Conference at COEP Tech</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <div class="callout">
+        <div class="stack" style="gap:8px">
+          <svg class="lotus" viewBox="0 0 64 40" aria-hidden="true"><g fill="currentColor"><path d="M32 2C26 10 26 24 32 34C38 24 38 10 32 2Z"/><path d="M32 34C26 26 18 20 9 18C11 28 20 34 32 34Z" opacity=".75"/><path d="M32 34C38 26 46 20 55 18C53 28 44 34 32 34Z" opacity=".75"/><path d="M32 34C22 32 10 30 2 26C8 34 20 37 32 34Z" opacity=".5"/><path d="M32 34C42 32 54 30 62 26C56 34 44 37 32 34Z" opacity=".5"/></g><path d="M12 38H52" stroke="currentColor" stroke-width="2"/></svg>
+          <h3>Network. Collaborate. Innovate.</h3>
+          <p>200+ researchers, faculty, industry leaders and students in Pune for two days of technical sessions, keynotes and posters.</p>
+        </div>
+        <a class="btn primary" href="#about">About MATEX 2027</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ======================= ABOUT ======================= -->
+<div class="page" id="p-about">
+  <div class="pagehead"><div class="wrap">
+    <div class="eyebrow">About the conference</div>
+    <h2>Bringing the materials community together</h2>
+    <p class="lede">MATEX 2027 brings researchers, faculty, industry leaders and students to Pune to exchange knowledge and present new research across materials, metallurgy and emerging technologies.</p>
+  </div></div>
+
+  <section class="block">
+    <div class="wrap stack" style="gap:36px">
+      <div class="stats">
+        <div><b>200+</b><span>Delegates expected</span></div>
+        <div><b>4</b><span>Engineering themes</span></div>
+        <div><b>2</b><span>Days, 8–9 April 2027</span></div>
+        <div><b>1854</b><span>Year COEP was founded</span></div>
+      </div>
+      <div class="split">
+        <div class="stack">
+          <h3>What the conference covers</h3>
+          <p>MATEX 2027 is hosted by the Department of Metallurgy &amp; Materials Engineering at COEP Technological University together with the Indian Institute of Metals, Pune Chapter. Its focus is sustainable, intelligent and high-performance materials.</p>
+          <p>The programme is organised around four engineering themes: green metallurgy and circular materials, AI and materials informatics, materials for extreme environments, and energy materials for electric mobility. Sessions are built for technical depth and for academia–industry collaboration.</p>
+        </div>
+        <div class="stack">
+          <h3>Who should attend</h3>
+          <div class="tablewrap"><table style="min-width:0">
+            <tbody>
+              <tr><td><b>Researchers &amp; faculty</b></td></tr>
+              <tr><td><b>Industry professionals &amp; R&amp;D leaders</b></td></tr>
+              <tr><td><b>Students &amp; young researchers</b></td></tr>
+              <tr><td><b>Policy makers &amp; government organisations</b></td></tr>
+              <tr><td><b>Materials &amp; metallurgical societies</b></td></tr>
+              <tr><td><b>Technology providers &amp; start-ups</b></td></tr>
+            </tbody>
+          </table></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap stack" style="gap:24px">
+      <div class="eyebrow">Why attend</div>
+      <div class="reasons">
+        <div><b>Frontier research</b><p>Hear and present current work on green metallurgy, AI for materials, alloys for extreme service and energy materials.</p></div>
+        <div><b>Academia meets industry</b><p>Researchers, R&amp;D leaders, policy makers and start-ups in the same sessions and corridors.</p></div>
+        <div><b>Visibility for your work</b><p>Oral and poster presentations. Strong full papers go to journals such as JMEP, Materials, Metals and JMRT; accepted abstracts to Transactions of the Indian Institute of Metals.</p></div>
+        <div><b>Room for young researchers</b><p>Students and early-career researchers get direct access to senior scientists and industry mentors.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap stack" style="gap:24px">
+      <div class="eyebrow">Hosted by</div>
+      <div class="hosts">
+        <div class="host wide">
+          <div class="yr">EST. 1948 · ORGANISING DEPARTMENT</div>
+          <h3>Department of Metallurgy &amp; Materials Engineering, COEP Tech</h3>
+          <div class="mme">
+            <div>
+              <p>Founded in 1948 as the Department of Metallurgical Engineering, MME is a long-standing centre for metallurgical and materials education in western Maharashtra. It is known for teaching, research and industrial consultancy, and its alumni include research scientists and leaders of major organisations.</p>
+              <p>Research is funded by DST, AICTE and industry, with collaborators including Cummins India, ARAI, Ador Welding, JSW Steel, DIAT and C-MET. Graduates join companies such as Tata Steel, JSW Steel, ArcelorMittal, Tata Motors and Bharat Forge.</p>
+            </div>
+            <div>
+              <dl>
+                <dt>B.Tech</dt><dd>Metallurgy &amp; Material Technology · NBA accredited</dd>
+                <dt>M.Tech</dt><dd>Process Metallurgy · Materials Engineering · NBA accredited</dd>
+                <dt>Ph.D.</dt><dd>Doctoral research across the department's areas</dd>
+                <dt>Head</dt><dd>Dr. Manisha G. Kulthe</dd>
+              </dl>
+              <div class="chips" aria-label="Research facilities">
+                <span>XRD · Bruker D8 Advance</span><span>FE-SEM · Zeiss</span><span>DSC / TGA</span><span>FTIR &amp; UV-Vis</span><span>Potentiostat &amp; corrosion chamber</span><span>1700 °C furnace</span><span>BET surface area</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="host">
+          <div class="yr">EST. 1854 · PUNE</div>
+          <h3>COEP Technological University</h3>
+          <p>One of the oldest engineering institutions in Asia, COEP has trained engineers in Pune for more than 170 years. Its Department of Metallurgy &amp; Materials Engineering works across physical and mechanical metallurgy, processing, characterisation and advanced materials.</p>
+        </div>
+        <div class="host">
+          <div class="yr">EST. 1946 · PUNE CHAPTER</div>
+          <h3>Indian Institute of Metals</h3>
+          <p>India's professional society for metallurgists and materials engineers, with chapters across the country. The Pune Chapter links the city's academic institutions with its forging, casting, automotive and materials-processing industry.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ======================= THEMES ======================= -->
+<div class="page" id="p-themes">
+  <div class="pagehead"><div class="wrap">
+    <div class="eyebrow">Scientific programme</div>
+    <h2>Four grand engineering themes</h2>
+    <p class="lede">Submissions are invited in any of the areas below. Topic lists are indicative; related work is welcome.</p>
+  </div></div>
+  <section class="block"><div class="wrap">
+    <article class="theme t-gm">
+      <div class="badge"><span class="z">01</span><span class="sym">GM</span></div>
+      <div><h3>Green Metallurgy, Critical Minerals &amp; Circular Materials</h3>
+        <ul><li>Sustainable extraction &amp; processing</li><li>Low-carbon metallurgy (H₂-DRI)</li><li>Resource efficiency &amp; circular economy</li><li>Recycling, urban mining &amp; e-waste</li><li>Critical minerals for strategic sectors</li><li>Sustainable processing &amp; climate technologies</li></ul></div>
+    </article>
+    <article class="theme t-ai">
+      <div class="badge"><span class="z">02</span><span class="sym">AI</span></div>
+      <div><h3>AI, Materials Informatics &amp; ICME</h3>
+        <ul><li>Machine learning for materials discovery</li><li>Data-driven alloy and process design</li><li>Computational materials &amp; CALPHAD</li><li>Integrated Computational Materials Engineering</li><li>Digital twins &amp; process modelling</li><li>Autonomous materials laboratories</li><li>Process and property prediction</li></ul></div>
+    </article>
+    <article class="theme t-ax">
+      <div class="badge"><span class="z">03</span><span class="sym">AX</span></div>
+      <div><h3>Advanced Materials &amp; Manufacturing for Extreme Environments</h3>
+        <ul><li>High-performance alloys, including advanced steels and high-entropy alloys</li><li>Aerospace, space &amp; defence materials</li><li>High-temperature &amp; radiation-resistant materials</li><li>Additive manufacturing &amp; advanced processing</li><li>Harsh service: corrosion, creep &amp; failure analysis</li></ul></div>
+    </article>
+    <article class="theme t-ev">
+      <div class="badge"><span class="z">04</span><span class="sym">EV</span></div>
+      <div><h3>Energy Materials &amp; Electric Mobility</h3>
+        <ul><li>Battery materials (Li-ion, solid-state, Na-ion)</li><li>Hydrogen production, storage &amp; fuel cells</li><li>Materials for electric vehicles</li><li>Renewable energy materials (solar, thermal, wind)</li><li>Energy storage &amp; grid materials</li><li>Recycling &amp; second-life materials</li><li>Safety, degradation &amp; lifetime prediction</li></ul></div>
+    </article>
+  </div></section>
+</div>
+
+<!-- ======================= PAPERS ======================= -->
+<div class="page" id="p-papers">
+  <div class="pagehead"><div class="wrap">
+    <div class="eyebrow">Call for papers</div>
+    <h2>Present your work at MATEX 2027</h2>
+    <p class="lede">Original, unpublished research is invited for oral and poster presentation in any of the four themes.</p>
+  </div></div>
+
+  <section class="block">
+    <div class="wrap split">
+      <div class="stack" style="gap:24px">
+        <h3>How to take part</h3>
+        <div class="timeline">
+          <div class="tl"><time>Step 1</time><span><b>Submit an abstract</b> of about 300 words through the online portal, naming one theme. Choose your <b>journal choice</b> for a full-length paper: <span class="yn">Yes</span> <span class="yn">No</span> <span class="yn">Later</span></span></div>
+          <div class="tl"><time>Step 2</time><span><b>Notification of acceptance</b> by email after review by the technical committee.</span></div>
+          <div class="tl"><time>Step 3</time><span><b>Submit the full paper</b> in the conference template if your abstract is accepted.</span></div>
+          <div class="tl final"><time>Step 4</time><span>Register and present, orally or as a poster, in Pune.</span></div>
+        </div>
+        <p><span class="tbd">Portal link · Template · To be announced</span></p>
+      </div>
+      <div class="stack" style="gap:20px">
+        <h3>Important dates</h3>
+        <div class="tablewrap"><table style="min-width:0"><tbody>
+          <tr><td class="t">08 Nov 2026</td><td>Call for papers &amp; abstract submission opens</td></tr>
+          <tr><td class="t">17 Jan 2027</td><td>Abstract submission deadline</td></tr>
+          <tr><td class="t">08 Feb 2027</td><td>Notification of acceptance</td></tr>
+          <tr><td class="t">07 Mar 2027</td><td>Full paper submission deadline</td></tr>
+          <tr><td class="t">20 Mar 2027</td><td>Final registration deadline</td></tr>
+          <tr><td class="t">08–09 Apr 2027</td><td><b>Conference</b></td></tr>
+        </tbody></table></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap stack" style="gap:20px">
+      <div class="eyebrow">Publishing</div>
+      <h3>Publication opportunities</h3>
+      <div class="reasons">
+        <div><b>Full-length papers · selected journals</b><p>High-quality full papers will be recommended to one of the following journals, subject to each journal's own peer review:</p>
+          <ul class="pubs">
+            <li><span>Journal of Materials Engineering and Performance</span><small>Springer · ASM International</small></li>
+            <li><span>Materials</span><small>MDPI</small></li>
+            <li><span>Metals</span><small>MDPI</small></li>
+            <li><span>Journal of Materials Research and Technology</span><small>Elsevier</small></li>
+          </ul></div>
+        <div><b>Accepted abstracts · Transactions of the Indian Institute of Metals</b><p>Accepted and presented contributions will be considered for <i>Transactions of the Indian Institute of Metals</i> (Springer), subject to the journal's peer review.</p></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ======================= PROGRAMME ======================= -->
+<div class="page" id="p-programme">
+  <div class="pagehead"><div class="wrap">
+    <div class="eyebrow">Programme at a glance</div>
+    <h2>Two days in Pune</h2>
+    <p class="lede">A tentative outline. Session titles, speakers and halls will be published once the programme is final in March 2027.</p>
+  </div></div>
+  <section class="block"><div class="wrap days">
+    <div>
+      <div class="dayhead"><h3>Day 1 · GM &amp; AI</h3><span>THU · 08 APR 2027</span></div>
+      <div class="tablewrap"><table style="min-width:0"><tbody>
+        <tr class="slot"><td class="t">08:30</td><td><b>Registration &amp; kit collection</b></td></tr>
+        <tr class="slot"><td class="t">09:00–10:00</td><td><b>Inauguration</b><small>Welcome by COEP Tech and IIM Pune Chapter</small></td></tr>
+        <tr class="slot"><td class="t">10:10–11:00</td><td><b>Plenary talk</b><span class="kind k-key">Plenary</span></td></tr>
+        <tr class="slot"><td class="t">11:10–13:30</td><td><b>Technical sessions · GM</b><span class="kind k-tech">Technical</span><small>Green Metallurgy, Critical Minerals &amp; Circular Materials</small></td></tr>
+        <tr class="slot"><td class="t">13:30–14:30</td><td><b>Lunch</b></td></tr>
+        <tr class="slot"><td class="t">14:30–15:20</td><td><b>Plenary talk</b><span class="kind k-key">Plenary</span></td></tr>
+        <tr class="slot"><td class="t">15:30–16:50</td><td><b>Technical sessions · AI</b><span class="kind k-tech">Technical</span><small>AI, Materials Informatics &amp; ICME</small></td></tr>
+        <tr class="slot"><td class="t">16:50–18:30</td><td><b>Poster session &amp; industrial exhibition</b></td></tr>
+      </tbody></table></div>
+    </div>
+    <div>
+      <div class="dayhead"><h3>Day 2 · AX &amp; EV</h3><span>FRI · 09 APR 2027</span></div>
+      <div class="tablewrap"><table style="min-width:0"><tbody>
+        <tr class="slot"><td class="t">09:00–09:50</td><td><b>Plenary talk</b><span class="kind k-key">Plenary</span></td></tr>
+        <tr class="slot"><td class="t">10:00–12:20</td><td><b>Technical sessions · AX</b><span class="kind k-tech">Technical</span><small>Advanced Materials &amp; Manufacturing for Extreme Environments</small></td></tr>
+        <tr class="slot"><td class="t">12:20–13:30</td><td><b>Microstructure exhibition &amp; quiz contest</b></td></tr>
+        <tr class="slot"><td class="t">13:30–14:30</td><td><b>Lunch</b></td></tr>
+        <tr class="slot"><td class="t">14:30–15:20</td><td><b>Plenary talk</b><span class="kind k-key">Plenary</span></td></tr>
+        <tr class="slot"><td class="t">15:30–16:50</td><td><b>Technical sessions · EV</b><span class="kind k-tech">Technical</span><small>Energy Materials &amp; Electric Mobility</small></td></tr>
+        <tr class="slot"><td class="t">16:50–18:15</td><td><b>Industry–academia session</b></td></tr>
+        <tr class="slot"><td class="t">18:30–19:00</td><td><b>Best research papers &amp; fishbowl</b></td></tr>
+        <tr class="slot"><td class="t">19:00–19:45</td><td><b>Valedictory session</b></td></tr>
+        <tr class="slot"><td class="t">19:45</td><td><b>Conference banquet</b><span class="kind k-soc">Social</span></td></tr>
+      </tbody></table></div>
+    </div>
+  </div></section>
+  <section class="block"><div class="wrap stack">
+    <div class="eyebrow">Keynote speakers</div>
+    <p class="lede">Invited speakers across the four themes will be announced here. <span class="tbd">To be announced</span></p>
+  </div></section>
+</div>
+
+<!-- ======================= REGISTER ======================= -->
+<div class="page" id="p-register">
+  <div class="pagehead"><div class="wrap">
+    <div class="eyebrow">Registration</div>
+    <h2>Fees &amp; registration</h2>
+    <p class="lede">Registration includes the conference kit, lunches, tea and coffee, the banquet and access to all technical sessions. At least one author of each accepted paper must register.</p>
+  </div></div>
+  <section class="block"><div class="wrap stack" style="gap:16px">
+    <div class="tablewrap"><table>
+      <thead><tr><th>Category</th><th>IIM member</th><th>Non-IIM member</th></tr></thead>
+      <tbody>
+        <tr><td><b>Students (UG / PG)</b></td><td class="t">₹ 1,000</td><td class="t">₹ 1,500</td></tr>
+        <tr><td><b>Students (Ph.D.)</b></td><td class="t" colspan="2">₹ 3,000</td></tr>
+        <tr><td><b>Postdoctoral researchers &amp; academic faculty members</b></td><td class="t" colspan="2">₹ 5,000</td></tr>
+        <tr><td><b>Industry delegates</b></td><td class="t" colspan="2">₹ 8,000</td></tr>
+        <tr><td><b>Foreign delegates</b></td><td class="t" colspan="2">US$ 250</td></tr>
+      </tbody>
+    </table></div>
+    <p style="color:var(--muted);font-size:.92rem">Payment details and the registration form will open with the call for papers.</p>
+  </div></section>
+
+  <section class="block"><div class="wrap stack" style="gap:24px">
+    <div class="stack">
+      <div class="eyebrow">Sponsor &amp; exhibit</div>
+      <h3>Partner with MATEX 2027</h3>
+      <p class="lede">Reach 200+ researchers, students and R&amp;D leaders in materials and metallurgy. Packages are indicative and can be tailored.</p>
+    </div>
+    <div class="tiers">
+      <div class="tier pt"><span class="metal">Pt</span><h3>Platinum</h3><ul><li>Logo on all conference media</li><li>Premium exhibition stall</li><li>Plenary-session slot</li><li>Complimentary delegate passes</li></ul></div>
+      <div class="tier"><span class="metal">Au</span><h3>Gold</h3><ul><li>Logo on website &amp; banners</li><li>Exhibition stall</li><li>Delegate passes</li></ul></div>
+      <div class="tier"><span class="metal">Ag</span><h3>Silver</h3><ul><li>Logo on website</li><li>Brochure insert in kit</li><li>Delegate pass</li></ul></div>
+      <div class="tier"><span class="metal">Cu</span><h3>Exhibitor</h3><ul><li>Exhibition stall</li><li>Listing in abstract book</li></ul></div>
+    </div>
+    <p><span class="tbd">Package amounts · To be announced</span></p>
+  </div></section>
+</div>
+
+<!-- ======================= COMMITTEE ======================= -->
+<div class="page" id="p-committee">
+  <div class="pagehead"><div class="wrap">
+    <div class="eyebrow">People</div>
+    <h2>Organising committee</h2>
+  </div></div>
+  <section class="block"><div class="wrap">
+    <dl class="roles">
+      <div class="role"><dt>Chief Patrons</dt><dd>
+        <div class="person"><b>Prof. Sunil Bhirud</b><span>Vice Chancellor, COEP Technological University</span></div>
+        <div class="person"><b>Dr. Dayaram N. Sonawane</b><span>Registrar, COEP Technological University</span></div>
+        <div class="person"><b>Dr. Parag A. Sadgir</b><span>Dean, School of Engineering and Technology, COEP Tech</span></div>
+        <div class="person"><b>Dr. S. P. Mahajan</b><span>Director, Board of Research, Innovation, Incubation and Linkages (RIIL), COEP Tech</span></div>
+      </dd></div>
+      <div class="role"><dt>Patron</dt><dd><div class="person"><b>Dr. Pravin Kumar</b><span>Chairman, IIM Pune Chapter</span></div></dd></div>
+      <div class="role"><dt>General Conference Chair</dt><dd><div class="person"><b>Dr. Manisha G. Kulthe</b><span>Head of the Department, MME, COEP Tech</span></div></dd></div>
+      <div class="role"><dt>Core Organising Team (COEP)</dt><dd>
+        <div class="duties">
+        <div><span class="duty">Coordinators</span><b>Dr. Jaydeep Saha</b><b>Dr. Arun Kumar Guralla</b></div>
+        <div><span class="duty">Food</span><b>Dr. Vinit K. Kanade</b><b>Dr. Abhishek M. More</b></div>
+        <div><span class="duty">Accommodation</span><b>Dr. Pravin F. Varade</b><b>Dr. Vijay T. Thavale</b></div>
+        <div><span class="duty">Registration</span><b>Dr. Swarnima P. Singh</b><b>Dr. Suvarna Dangarikar</b></div>
+        <div><span class="duty">Website management</span><b>Dr. Abhishek Pandey</b></div>
+        <div><span class="duty">Session management</span><b>Dr. Abhinav Dixit</b><b>Dr. Manish K. Tiwari</b></div>
+        <div><span class="duty">Invitations</span><b>Dr. Neelaambhigai Mayilswamy</b><b>Dr. Manasi Mulay</b></div>
+        <div><span class="duty">Venue</span><b>Dr. Roshan D. Gadve</b><b>Dr. Prashant A. Dixit</b></div>
+      </div>
+      </dd></div>
+      <div class="role"><dt>Advisory Committee</dt><dd><div class="person"><span>Eminent academicians, industry experts and international researchers. <span class="tbd">Names to be announced</span></span></div></dd></div>
+    </dl>
+  </div></section>
+</div>
+
+<!-- ======================= VENUE ======================= -->
+<div class="page" id="p-venue">
+  <div class="pagehead"><div class="wrap">
+    <div class="eyebrow">Venue &amp; contact</div>
+    <h2>COEP Technological University, Pune</h2>
+    <p class="lede">Wellesley Road, Shivajinagar, Pune, Maharashtra 411005, India. The campus sits on the bank of the Mula river, a short drive from the city centre.</p>
+    <div><a class="btn line" href="https://www.google.com/maps/search/?api=1&amp;query=COEP+Technological+University+Pune" target="_blank" rel="noopener">Open in Google Maps ↗</a></div>
+  </div></div>
+
+  <section class="block"><div class="wrap stack" style="gap:20px">
+    <div class="eyebrow">Getting there</div>
+    <div class="info">
+      <div><h3>By air</h3><p>Pune International Airport (PNQ), Lohegaon, has domestic and selected international connections. Mumbai (BOM) is about 3–4 hours by road.</p></div>
+      <div><h3>By rail</h3><p>Pune Junction and Shivajinagar railway stations are both close to campus, with direct trains from Mumbai, Delhi, Bengaluru and Hyderabad.</p></div>
+      <div><h3>By metro &amp; road</h3><p>Pune Metro's Shivajinagar station is near the campus. Auto-rickshaws and app cabs are widely available.</p></div>
+    </div>
+    <p style="color:var(--muted)">Accommodation options and partner hotels <span class="tbd">To be announced</span></p>
+  </div></section>
+
+  <section class="block"><div class="wrap stack" style="gap:20px">
+    <div class="eyebrow">Why Pune</div>
+    <div class="reasons">
+      <div><b>An education city</b><p>Pune is home to universities, national laboratories and research institutes, and a large student community.</p></div>
+      <div><b>A manufacturing corridor</b><p>The Pune–Chakan–Ranjangaon belt hosts automotive, forging, casting and materials-processing industry.</p></div>
+    </div>
+  </div></section>
+
+  <section class="block"><div class="wrap stack" style="gap:20px">
+    <div class="eyebrow">Contact</div>
+    <div class="contact">
+      <div>
+        <h3>Dr. Jaydeep Saha</h3>
+        <p style="color:var(--muted)">Coordinator · Dept. of MME, COEP Tech</p>
+        <div class="mail"><code>sahaj.meta@coeptech.ac.in</code><button class="copy" data-copy="sahaj.meta@coeptech.ac.in">Copy</button></div>
+      </div>
+      <div>
+        <h3>Dr. Arun Kumar Guralla</h3>
+        <p style="color:var(--muted)">Coordinator · Dept. of MME, COEP Tech</p>
+        <p><span class="tbd">Email · To be announced</span></p>
+      </div>
+    </div>
+    <p style="color:var(--muted)">Conference email and phone <span class="tbd">To be announced</span></p>
+  </div></section>
+</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="stack" style="gap:6px">
+      <svg class="lotus" viewBox="0 0 64 40" aria-hidden="true"><g fill="currentColor"><path d="M32 2C26 10 26 24 32 34C38 24 38 10 32 2Z"/><path d="M32 34C26 26 18 20 9 18C11 28 20 34 32 34Z" opacity=".75"/><path d="M32 34C38 26 46 20 55 18C53 28 44 34 32 34Z" opacity=".75"/><path d="M32 34C22 32 10 30 2 26C8 34 20 37 32 34Z" opacity=".5"/><path d="M32 34C42 32 54 30 62 26C56 34 44 37 32 34Z" opacity=".5"/></g><path d="M12 38H52" stroke="currentColor" stroke-width="2"/></svg>
+      <b>MATEX<span> 2027</span></b>
+      <span>8–9 April 2027 · COEP Technological University, Pune</span>
+      <span>Dept. of Metallurgy &amp; Materials Engineering, with IIM Pune Chapter</span>
+      <span class="draft">Preliminary site · details subject to change</span>
+    </div>
+    <nav aria-label="Footer">
+      <a href="#about">About</a><a href="#themes">Themes</a><a href="#papers">Call for Papers</a><a href="#programme">Programme</a><a href="#register">Registration</a><a href="#committee">Committee</a><a href="#venue">Venue &amp; Contact</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ---------- router ---------- */
+  var pages=["home","about","themes","papers","programme","register","committee","venue"];
+  var nav=document.getElementById("mainnav"), burger=document.getElementById("burger");
+  function show(){
+    var id=(location.hash||"#home").slice(1); if(pages.indexOf(id)<0) id="home";
+    pages.forEach(function(p){document.getElementById("p-"+p).classList.toggle("active",p===id)});
+    nav.querySelectorAll("a").forEach(function(a){ if(a.getAttribute("href")==="#"+id) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current"); });
+    nav.classList.remove("open"); burger.setAttribute("aria-expanded","false");
+    window.scrollTo(0,0);
+    if(id==="home") startGrains();
+  }
+  window.addEventListener("hashchange",show);
+  burger.addEventListener("click",function(){var o=nav.classList.toggle("open");burger.setAttribute("aria-expanded",o?"true":"false")});
+
+  /* ---------- countdown ---------- */
+  var target=new Date("2027-04-08T09:00:00+05:30").getTime();
+  function tick(){
+    var ms=Math.max(0,target-Date.now());
+    document.getElementById("cd-d").textContent=Math.floor(ms/864e5);
+    document.getElementById("cd-h").textContent=String(Math.floor(ms/36e5)%24).padStart(2,"0");
+    document.getElementById("cd-m").textContent=String(Math.floor(ms/6e4)%60).padStart(2,"0");
+  }
+  tick(); setInterval(tick,30000);
+
+  /* ---------- copy ---------- */
+  document.querySelectorAll(".copy").forEach(function(b){
+    b.addEventListener("click",function(){
+      var t=b.getAttribute("data-copy");
+      var done=function(){b.textContent="Copied";setTimeout(function(){b.textContent="Copy"},1600)};
+      var sel=function(){var r=document.createRange();r.selectNodeContents(b.previousElementSibling);var s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent="Selected"};
+      try{navigator.clipboard.writeText(t).then(done,sel)}catch(e){sel()}
+    });
+  });
+
+  /* ---------- rangoli ---------- */
+  var cv=document.getElementById("rangoli"), ctx=cv.getContext("2d"), started=false, rot=0;
+  var still=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function tok(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()||"#D9601A"}
+  function petal(r0,r1,wd){ctx.beginPath();ctx.moveTo(r0,0);ctx.quadraticCurveTo((r0+r1)/2,wd,r1,0);ctx.quadraticCurveTo((r0+r1)/2,-wd,r0,0);ctx.closePath();}
+  function ring(n,fn,off){for(var i=0;i<n;i++){ctx.save();ctx.rotate((i+(off||0))*2*Math.PI/n);fn();ctx.restore();}}
+  function rangoli(cx,cy,R,a){
+    var F=tok("--forge"),S=tok("--saffron"),L=tok("--leaf"),P=tok("--rose"),A=tok("--azure");
+    ctx.save();ctx.translate(cx,cy);ctx.lineWidth=1.3;var base=.6;
+    /* outer scallops + dot ring (turn one way) */
+    ctx.save();ctx.rotate(a);
+    ctx.strokeStyle=S;ctx.globalAlpha=.75*base;
+    ring(32,function(){ctx.beginPath();ctx.arc(R*.97,0,R*.095,-Math.PI/2,Math.PI/2);ctx.stroke();});
+    ctx.fillStyle=F;ctx.globalAlpha=.6*base;
+    ring(32,function(){ctx.beginPath();ctx.arc(R*.86,0,R*.018,0,7);ctx.fill();},.5);
+    ctx.globalAlpha=.35*base;ctx.strokeStyle=F;ctx.beginPath();ctx.arc(0,0,R*.8,0,7);ctx.stroke();
+    /* 16 lotus petals */
+    ring(16,function(){petal(R*.4,R*.76,R*.11);ctx.globalAlpha=.22*base;ctx.fillStyle=S;ctx.fill();ctx.globalAlpha=.7*base;ctx.strokeStyle=F;ctx.stroke();});
+    ring(16,function(){petal(R*.5,R*.7,R*.04);ctx.globalAlpha=.35*base;ctx.fillStyle=F;ctx.fill();},.5);
+    ctx.restore();
+    /* inner ring (turn the other way) */
+    ctx.save();ctx.rotate(-a*1.6);
+    ring(8,function(){petal(R*.16,R*.42,R*.1);ctx.globalAlpha=.3*base;ctx.fillStyle=P;ctx.fill();ctx.globalAlpha=.75*base;ctx.strokeStyle=P;ctx.stroke();});
+    ring(8,function(){petal(R*.22,R*.38,R*.05);ctx.globalAlpha=.45*base;ctx.fillStyle=L;ctx.fill();},.5);
+    ctx.globalAlpha=.5*base;ctx.strokeStyle=A;ctx.beginPath();ctx.arc(0,0,R*.45,0,7);ctx.stroke();
+    ctx.restore();
+    /* bindu */
+    ctx.globalAlpha=.55*base;ctx.fillStyle=F;ctx.beginPath();ctx.arc(0,0,R*.13,0,7);ctx.fill();
+    ctx.globalAlpha=.9*base;ctx.fillStyle=S;ctx.beginPath();ctx.arc(0,0,R*.06,0,7);ctx.fill();
+    ctx.restore();ctx.globalAlpha=1;
+  }
+  function size(){var r=cv.getBoundingClientRect(),d=Math.min(2,window.devicePixelRatio||1);cv.width=r.width*d;cv.height=r.height*d;ctx.setTransform(d,0,0,d,0,0);}
+  function draw(){
+    var w=cv.clientWidth,h=cv.clientHeight;ctx.clearRect(0,0,w,h);
+    var R=Math.min(h*.6,w*.42);
+    rangoli(w>720?w-R*.8:w*.78,h*.55,R,rot);
+    if(w>720) rangoli(w*.52,h*.93,R*.28,-rot*1.4);
+    if(!still){rot+=.0012;requestAnimationFrame(draw);}
+  }
+  function startGrains(){
+    if(started) return; started=true; size(); draw();
+    var t; window.addEventListener("resize",function(){clearTimeout(t);t=setTimeout(function(){size();if(still)draw();},150)});
+  }
+  show();
+  window.addEventListener("load",function(){ if((location.hash||"#home")==="#home") startGrains(); });
+})();
+</script>
+
+</body></html>
